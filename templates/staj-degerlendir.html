@@ -1,0 +1,167 @@
+{{define "content"}}
+<div class="main-title">
+  <h1>Staj Değerlendir</h1>
+</div>
+
+<div class="container">
+  {{if ne .Alert ""}}
+    {{template "alert" .}}
+  {{end}}
+
+  <form method="GET" action="/staj-degerlendir">
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="no">Öğrenci No</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="no" type="number">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="baslangic">Başlangıç Tarihi</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="baslangic" type="date">
+      </div>
+    </div>
+
+    <input class="btn btn-success" type="submit" value="Değerlendir">
+  </form>
+
+  <hr>
+
+  {{if .Vars.Mul}}
+  <form method="POST" action="/staj-degerlendir?no={{.Vars.Mul.OgrenciNo}}&baslangic={{.Vars.Mul.StajBaslangic}}">
+    <input name="no" type="hidden" value="{{.Vars.Mul.OgrenciNo}}">
+    <input name="baslangic" type="hidden" value="{{.Vars.Mul.StajBaslangic}}">
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="xno">Öğrenci No</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="xno" type="number" value="{{.Vars.Mul.OgrenciNo}}" disabled>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="ad">Ad</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="ad" type="text" value="{{.Vars.Mul.Ad}}" disabled>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="soyad">Soyad</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="soyad" type="text" value="{{.Vars.Mul.Soyad}}" disabled>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="soyad">Öğretim</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="ogretim" type="text" value="{{if eq .Vars.Mul.Ogretim 1}}I{{else}}II{{end}}. Öğretim" disabled>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="xbaslangic">Başlangıç Günü</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="xbaslangic" type="date" value="{{.Vars.Mul.StajBaslangic}}" disabled>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="PuanDevam">Devam</label>
+      </div>
+      <div class="col-2">
+        <input class="form-control" name="PuanDevam" type="number" min="0" max="5">
+      </div>
+
+      <div class="col-2 form-label">
+        <label for="PuanCaba">Çaba ve Çalışma</label>
+      </div>
+      <div class="col-2">
+        <input class="form-control" name="PuanCaba" type="number" min="0" max="5">
+      </div>
+
+      <div class="col-2 form-label">
+        <label for="PuanVakit">İşi Vaktinde Yapma</label>
+      </div>
+      <div class="col-2">
+        <input class="form-control" name="PuanVakit" type="number" min="0" max="5">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="PuanAmireDavranis">Amire Karşı Davranış</label>
+      </div>
+      <div class="col-2">
+        <input class="form-control" name="PuanAmireDavranis" type="number" min="0" max="5">
+      </div>
+
+      <div class="col-2 form-label">
+        <label for="PuanIsArkadasaDavranis">İş Arkadaşlarına Karşı Davranış</label>
+      </div>
+      <div class="col-2">
+        <input class="form-control" name="PuanIsArkadasaDavranis" type="number" min="0" max="5">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="PuanProje">Proje</label>
+      </div>
+      <div class="col-2">
+        <input class="form-control" name="PuanProje" type="number" min="0" max="100">
+      </div>
+
+      <div class="col-2 form-label">
+        <label for="PuanDuzen">Düzen</label>
+      </div>
+      <div class="col-2">
+        <input class="form-control" name="PuanDuzen" type="number" min="0" max="100">
+      </div>
+
+      <div class="col-2 form-label">
+        <label for="PuanSunum">Sunum</label>
+      </div>
+      <div class="col-2">
+        <input class="form-control" name="PuanSunum" type="number" min="0" max="100">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="PuanIcerik">İçerik</label>
+      </div>
+      <div class="col-2">
+        <input class="form-control" name="PuanIcerik" type="number" min="0" max="100">
+      </div>
+
+      <div class="col-2 form-label">
+        <label for="PuanMulakat">Mülakat</label>
+      </div>
+      <div class="col-2">
+        <input class="form-control" name="PuanMulakat" type="number" min="0" max="100">
+      </div>
+    </div>
+
+    <input class="btn btn-success" type="submit" value="Değerlendir">
+  </form>
+  {{end}}
+</div>
+{{end}}

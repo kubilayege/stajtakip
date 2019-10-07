@@ -1,0 +1,88 @@
+{{define "content"}}
+<div class="main-title">
+  <h1>Mülakat Listesi</h1>
+</div>
+
+<div class="container">
+  {{if ne .Alert ""}}
+    {{template "alert" .}}
+  {{end}}
+
+  <form class="form" method="POST" action="/mulakat">
+    <input type="hidden" name="gorev" value="yenile">
+
+    <a href="/mulakat-pdf" class="btn btn-info"><span class="oi oi-file"></span> PDF</a>
+    <a href="/mulakat-xlsx" class="btn btn-info"><span class="oi oi-document"></span> XLSX</a>
+
+    <input class="btn btn-primary" type="submit" value="Listeyi Yenile">
+  </form>
+
+  {{if and .Vars .Vars.Mulakatlar}}
+  <br>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Ad</th>
+        <th scope="col">Soyad</th>
+        <th scope="col">I/II</th>
+        <th scope="col">Tarih</th>
+        <th scope="col">Saat</th>
+        <th scope="col">Komisyon Üyesi</th>
+        <th scope="col">Komisyon Üyesi</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Vars.Mulakatlar}}
+      <tr>
+        <form class="form" method="POST" action="/mulakat">
+          <input type="hidden" name="gorev" value="guncelle">
+          <input type="hidden" name="no" value="{{.OgrenciNo}}">
+          <input type="hidden" name="baslangic" value="{{.StajBaslangic}}">
+
+          <th scope="row">{{.OgrenciNo}}</th>
+          <td>{{.Ad}}</td>
+          <td>{{.Soyad}}</td>
+          <td>{{if eq .Ogretim 1}}I{{else}}II{{end}}</td>
+          <td><input class="form-control" type="date" name="tarih" value="{{.Tarih}}"></td>
+          <td><input class="form-control" type="time" name="saat" value="{{.Saat}}"></td>
+          <td>
+            <select class="custom-select" name="komisyon1">
+              <option value="-">-</option>
+              {{$kom := .KomisyonUye1}}
+              {{range $.Vars.Komisyon}}
+              {{if .Dahil}}
+              <option value="{{.AdSoyad}}"{{if eq $kom .AdSoyad}} selected{{end}}>{{.AdSoyad}}</option>
+              {{end}}
+              {{end}}
+            </select>
+          </td>
+          <td>
+            <select class="custom-select" name="komisyon2">
+              <option value="-">-</option>
+              {{$kom := .KomisyonUye2}}
+              {{range $.Vars.Komisyon}}
+              {{if .Dahil}}
+              <option value="{{.AdSoyad}}"{{if eq $kom .AdSoyad}} selected{{end}}>{{.AdSoyad}}</option>
+              {{end}}
+              {{end}}
+            </select>
+          </td>
+          <td><input class="btn btn-success" type="submit" value="Güncelle"></td>
+          <td>
+            {{if .Tarih}}
+            <a href="/staj-degerlendir?no={{.OgrenciNo}}&baslangic={{.StajBaslangic}}" class="btn btn-primary">
+              <span class="oi oi-check"></span> Değerlendir
+            </a>
+            {{end}}
+          </td>
+        </form>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  {{end}}
+</div>
+{{end}}

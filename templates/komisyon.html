@@ -1,0 +1,58 @@
+{{define "content"}}
+<div class="main-title">
+  <h1>Komisyon</h1>
+</div>
+
+<div class="container">
+  {{if ne .Alert ""}}
+    {{template "alert" .}}
+  {{end}}
+
+  <form method="POST" action="/komisyon">
+    <input type="hidden" name="gorev" value="ekle">
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="adSoyad">Ad Soyad</label>
+      </div>
+      <div class="col-8">
+        <input class="form-control" name="adSoyad" type="text">
+      </div>
+      <div class="col-2">
+        <input class="btn btn-primary" type="submit" value="Ekle">
+      </div>
+    </div>
+  </form>
+
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Ad Soyad</th>
+        <th scope="col">Dahil</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Vars.Uyeler}}
+      <tr>
+        <td scope="row">{{.AdSoyad}}</td>
+        <td scope="row">
+          <form method="POST" action="/komisyon">
+            <input type="hidden" name="gorev" value="guncelle">
+            <input type="hidden" name="adSoyad" value="{{.AdSoyad}}" >
+            <input type="checkbox" name="dahil" onchange="this.form.submit()" {{if .Dahil}} checked{{end}} >
+          </form>
+        </td>
+        <td scope= "row">
+            <form method="POST" action="/komisyon">
+              <input type="hidden" name="gorev" value="sil">
+              <input type="hidden" name="adSoyad" value="{{.AdSoyad}}" >
+              <input class="btn btn-primary" value="Sil" type="submit">
+            </form>
+        </td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+</div>
+{{end}}

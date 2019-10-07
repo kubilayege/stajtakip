@@ -1,0 +1,63 @@
+{{define "content"}}
+<div class="main-title">
+  <h1>Öğrenci Ekle</h1>
+</div>
+
+{{if ne .Alert ""}}
+  {{template "alert" .}}
+{{end}}
+
+{{if and .Vars .Vars.No}}
+<a href="/ogrenci-bilgi?no={{.Vars.No}}" class="btn btn-secondary">Öğrenci Bilgilerini Görüntüle</a>
+<br>
+<hr>
+<br>
+{{end}}
+
+<div class="container">
+  <form method="POST" action="/ogrenci-ekle">
+
+    <div class="form-group row">
+      <div class="col">
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="ogretim1" name="ogretim" class="custom-control-input" value="1">
+          <label class="custom-control-label" for="ogretim1">I. Öğretim</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="ogretim2" name="ogretim" class="custom-control-input" value="2">
+          <label class="custom-control-label" for="ogretim2">II. Öğretim</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="no">Öğrenci No</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="no" type="number">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="ad">Ad</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="ad" type="text">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="soyad">Soyad</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="soyad" type="text">
+      </div>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="Ekle">
+  </form>
+</div>
+{{end}}

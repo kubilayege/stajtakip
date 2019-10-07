@@ -1,0 +1,55 @@
+{{define "content"}}
+<div class="main-title">
+  <h1>Konular</h1>
+</div>
+
+<div class="container">
+  {{if ne .Alert ""}}
+    {{template "alert" .}}
+  {{end}}
+
+  <form method="POST" action="/konular">
+    <input type="hidden" name="gorev" value="ekle">
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="baslik">Başlık</label>
+      </div>
+      <div class="col-8">
+        <input class="form-control" name="baslik" type="text">
+      </div>
+      <div class="col-2">
+        <input class="btn btn-primary" type="submit" value="Ekle">
+      </div>
+    </div>
+  </form>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Konular</th>
+        <th scope="col">Aktif</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Vars.Konular}}
+      <tr>
+          <td scope="row">{{.Baslik}}</td>
+          <td scope="row">
+          <form method="POST" action="/konular">
+            <input type="hidden" name="gorev" value="guncelle">
+            <input type="hidden" name="baslik" value="{{.Baslik}}">
+            <input type="checkbox" name="aktif" onchange="this.form.submit()" {{if .Aktif}} checked{{end}} >
+          </form>
+          <td scope= "row">
+            <form method="POST" action="/konular">
+              <input type="hidden" name="gorev" value="sil">
+              <input type="hidden" name="baslik" value="{{.Baslik}}" >
+              <input class="btn btn-primary" value="Sil" type="submit">
+            </form>
+          </td>
+        </tr>
+      {{end}}
+    </tbody>
+  </table>
+</div>
+{{end}}

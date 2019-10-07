@@ -1,0 +1,6 @@
+{
+	"SunucuAdresi":     "127.0.0.1:8080",
+	"VeritabaniAdresi": "root@/stajtakip",
+	"LogDosyasi":       "stajtakip.log",
+	"GerekenStajGunu":  57
+}

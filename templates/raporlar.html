@@ -1,0 +1,103 @@
+{{define "content"}}
+<div class="main-title">
+  <h1>Raporlar</h1>
+</div>
+
+{{if ne .Alert ""}}
+{{template "alert" .}}
+{{end}}
+
+<div class="container">
+  <form method="GET" action="/">
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="year">Başlangıç Yılı</label>
+      </div>
+      <div class="col-3">
+        <input class="form-control" name="baslangic" type="number"{{if .Vars.Baslangic}} value="{{.Vars.Baslangic}}"{{end}}>
+      </div>
+      <div class="col-2 form-label">
+        <label for="year">Bitiş Yılı</label>
+      </div>
+      <div class="col-3">
+        <input class="form-control" name="bitis" type="number"{{if .Vars.Bitis}} value="{{.Vars.Bitis}}"{{end}}>
+      </div>
+      <div class="col-2">
+        <input class="btn btn-primary" type="submit" value="Göster">
+      </div>
+    </div>
+  </form>
+
+  {{if .Vars.SehirRapor}}
+  <br>
+  <hr>
+  <br>
+  <h3>İl Bazında Staj Başarı Oranları</h3>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Şehir</th>
+        <th scope="col">Başarı Oranı</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Vars.SehirRapor}}
+      <tr>
+        <th scope="row">{{.Sehir}}</th>
+        <td>%{{.BasariOrani}}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  {{end}}
+
+  {{if .Vars.KonuRapor}}
+  <br>
+  <hr>
+  <br>
+  <h3>Konu Başlıklarına Göre Staj Başarı Oranları</h3>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Konu</th>
+        <th scope="col">Başarı Oranı</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Vars.KonuRapor}}
+      <tr>
+        <th scope="row">{{.Konu}}</th>
+        <td>%{{.BasariOrani}}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  {{end}}
+
+  {{if .Vars.DagilimRapor}}
+  <br>
+  <hr>
+  <br>
+  <h3>Konu Başlıklarına Göre Staj Dağılım Oranları</h3>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Konu</th>
+        <th scope="col">Dağılım Oranı</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Vars.DagilimRapor}}
+      <tr>
+        <th scope="row">{{.Konu}}</th>
+        <td>%{{.DagilimOrani}}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  {{end}}
+</div>
+{{end}}

@@ -1,0 +1,5 @@
+*.exe
+.vscode/launch.json
+stajtakip.log
+stajtest.log
+ayarlar.json

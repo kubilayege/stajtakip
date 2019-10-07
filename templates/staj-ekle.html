@@ -1,0 +1,193 @@
+{{define "content"}}
+<div class="main-title">
+  <h1>Staj Ekle</h1>
+</div>
+
+<div class="container">
+  <div class="alert alert-warning hidden" id="stajUyari15Gun" role="alert">
+    <h4 class="alert-heading"><span class="oi oi-warning"></span> Uyarı</h4>
+    Staj günü 15 günden az.
+  </div>
+
+  <div class="alert alert-warning hidden" id="stajUyari25Gun" role="alert">
+    <h4 class="alert-heading"><span class="oi oi-warning"></span> Uyarı</h4>
+    2. Sınıf öğrencisi ve staj günü 25 günden fazla.
+  </div>
+
+  <div class="alert alert-warning hidden" id="stajUyariAyniKurum" role="alert">
+    <h4 class="alert-heading"><span class="oi oi-warning"></span> Uyarı</h4>
+    Öğrenci 2. stajını aynı kurumda staj yapıyorsa, staj günü 40 günü geçmemeli veya farklı departmanda olduğunu ispatlayabilmelidir.
+  </div>
+
+  <div class="alert alert-warning hidden" id="stajUyariArgeDegil" role="alert">
+    <h4 class="alert-heading"><span class="oi oi-warning"></span> Uyarı</h4>
+    Sadece konusu ARGE olan staj gün sayısı 40 günden fazla olabilir.
+  </div>
+
+  <div class="alert alert-warning hidden" id="stajUyariArge" role="alert">
+    <h4 class="alert-heading"><span class="oi oi-warning"></span> Uyarı</h4>
+    Konusu ARGE olan staj gün sayısı 60 güne kadar çıkabilir.
+  </div>
+
+  {{if ne .Alert ""}}
+    {{template "alert" .}}
+  {{end}}
+
+  <form class="form" method="GET" action="/staj-ekle">
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="no">Öğrenci No</label>
+      </div>
+      <div class="col-4">
+        <input class="form-control" name="no" type="number"{{if .Vars.No}} value="{{.Vars.No}}"{{end}}>
+      </div>
+      <div class="col-2">
+        <input class="btn btn-primary" type="submit" value="Staj Ekle">
+      </div>
+    </div>
+  </form>
+
+  {{if .Vars.No}}
+  <br>
+  <hr>
+  <br>
+
+  <datalist id="kurumlist" class="hidden">
+    {{range .Vars.Kurumlar}}
+    <option value="{{.}}">
+    {{end}}
+  </datalist>
+
+  <script>
+    var stajlar = [
+      {{range .Vars.Stajlar}}
+      { "KurumAdi": {{.KurumAdi}}, "ToplamGun": {{.ToplamGun}} },
+      {{end}}
+    ];
+  </script>
+
+  <p>
+    <a class="btn btn-primary" data-toggle="collapse" href="#normalstaj"
+      role="button" aria-expanded="{{if not .Vars.DenkStaj}}true{{else}}false{{end}}" aria-controls="normalstaj">
+      Staj
+    </a>
+    <a class="btn btn-primary" data-toggle="collapse" href="#denkstaj"
+      role="button" aria-expanded="{{if .Vars.DenkStaj}}true{{else}}false{{end}}" aria-controls="denkstaj">
+      DGS/Yatay Geçiş Staj
+    </a>
+  </p>
+  <div id="stajgroup">
+    <div class="collapse{{if not .Vars.DenkStaj}} show{{end}}" id="normalstaj" data-parent="#stajgroup">
+      <form method="POST" action="/staj-ekle?no={{.Vars.No}}">
+        <input type="hidden" name="denk" value="0">
+
+        <div class="form-group row">
+          <div class="col-2 form-label">
+            <label for="xno">Öğrenci No</label>
+          </div>
+          <div class="col-4">
+            <input class="form-control" name="xno" type="text" value="{{.Vars.No}}" disabled>
+          </div>
+          <div class="col-2 form-label">
+            <label for="konu">Konu</label>
+          </div>
+          <div class="col-4">
+            <select class="custom-select" name="konu" id="stajKonu">
+              {{range .Vars.Konular}}
+              {{if .Aktif}}
+              <option value="{{.Baslik}}">{{.Baslik}}</option>
+              {{end}}
+              {{end}}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-2 form-label">
+            <label for="kurum">Kurum</label>
+          </div>
+          <div class="col-4">
+            <input class="form-control" name="kurum" type="text" list="kurumlist" id="stajKurumAdi">
+          </div>
+          <div class="col-2 form-label">
+            <label for="sehir">Şehir</label>
+          </div>
+          <div class="col-4">
+            <input class="form-control" name="sehir" type="text">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-2 form-label">
+            <label for="baslangic">Başlangıç Günü</label>
+          </div>
+          <div class="col-4">
+            <input class="form-control" name="baslangic" type="date">
+          </div>
+          <div class="col-2 form-label">
+            <label for="bitis">Bitiş Günü</label>
+          </div>
+          <div class="col-4">
+            <input class="form-control" name="bitis" type="date">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-2 form-label">
+            <label for="sinif">Sınıf</label>
+          </div>
+          <div class="col-4">
+            <input class="form-control" name="sinif" type="number" min="2" max="8" id="stajSinif">
+          </div>
+          <div class="col-2 form-label">
+            <label for="toplamgun">Toplam Gün</label>
+          </div>
+          <div class="col-4">
+            <input class="form-control" name="toplamgun" type="number" min="1" id="stajToplamGun">
+          </div>
+        </div>
+
+        <input class="btn btn-primary" type="submit" value="Ekle">
+      </form>
+    </div>
+    <div class="collapse{{if .Vars.DenkStaj}} show{{end}}" id="denkstaj" data-parent="#stajgroup">
+      <form method="POST" action="/staj-ekle?no={{.Vars.No}}">
+        <input type="hidden" name="denk" value="1">
+
+        <div class="form-group row">
+          <div class="col-2 form-label">
+            <label for="xno">Öğrenci No</label>
+          </div>
+          <div class="col-4">
+            <input class="form-control" name="xno" type="text" value="{{.Vars.No}}" disabled>
+          </div>
+          <div class="col-2 form-label">
+            <label for="toplamgun">Toplam Gün</label>
+          </div>
+          <div class="col-4">
+            <input class="form-control" name="toplamgun" type="number" min="1">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-2 form-label">
+            <label for="kurum">Kurum</label>
+          </div>
+          <div class="col-4">
+            <input class="form-control" name="kurum" type="text" list="kurumlist">
+          </div>
+          <div class="col-2 form-label">
+            <label for="okul">Önceki Okul</label>
+          </div>
+          <div class="col-4">
+            <input class="form-control" name="okul" type="text">
+          </div>
+        </div>
+
+        <input class="btn btn-primary" type="submit" value="Ekle">
+      </form>
+    </div>
+  </div>
+  {{end}}
+</div>
+{{end}}

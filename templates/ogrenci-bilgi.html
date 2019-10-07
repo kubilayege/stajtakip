@@ -1,0 +1,134 @@
+{{define "content"}}
+<div class="main-title">
+  <h1>Öğrenci Bilgileri</h1>
+</div>
+
+{{if ne .Alert ""}}
+  {{template "alert" .}}
+{{end}}
+
+<div class="container">
+  {{if .Vars.Ogr}}
+  {{if .Vars.Basari}}
+  <span class="badge badge-pill badge-success">Stajını Tamamlamış</span>
+  {{else}}
+  <span class="badge badge-pill badge-danger">Stajını Tamamlamamış</span>
+  {{end}}
+
+  <hr>
+
+  <form method="POST" action="/ogrenci-bilgi">
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="no">Öğrenci No</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="no" type="number" value="{{.Vars.Ogr.No}}" disabled>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="ad">Ad</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="ad" type="text" value="{{.Vars.Ogr.Ad}}" disabled>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="soyad">Soyad</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="soyad" type="text" value="{{.Vars.Ogr.Soyad}}" disabled>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-2 form-label">
+        <label for="ogretim">Öğretim</label>
+      </div>
+      <div class="col-10">
+        <input class="form-control" name="ogretim" type="text" value="{{if eq .Vars.Ogr.Ogretim 1}}I{{else}}II{{end}}. Öğretim" disabled>
+      </div>
+    </div>
+  </form>
+
+  {{if .Vars.OgrEk}}
+  <a href="/uploads/{{.Vars.OgrEk.Dosya}}" class="btn btn-secondary">Belgeyi Göster</a>
+  {{else}}
+  <a href="/ogrenci-belge-ekle?no={{.Vars.Ogr.No}}" class="btn btn-secondary">Belge Ekle</a>
+  {{end}}
+  <a href="/staj-ekle?no={{.Vars.Ogr.No}}" class="btn btn-success"><span class="oi oi-plus"></span> Staj Ekle</a>
+
+  <br>
+  <br>
+
+  {{if ne (len .Vars.Stajlar) 0}}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Kurum Adı</th>
+        <th scope="col">Şehir</th>
+        <th scope="col">Konu Başlık</th>
+        <th scope="col">Başlangıç</th>
+        <th scope="col">Bitiş</th>
+        <th scope="col">Sınıf</th>
+        <th scope="col">Kabul Gün</th>
+        <th scope="col">Toplam Gün</th>
+        <th scope="col">Durum</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Vars.Stajlar}}
+      <tr>
+        <td>{{.KurumAdi}}</td>
+        <td>{{.Sehir}}</td>
+        <td>{{.KonuBaslik}}</td>
+        <td>{{.Baslangic}}</td>
+        <td>{{.Bitis}}</td>
+        <td>{{.Sinif}}</td>
+        <td>{{.KabulGun}}</td>
+        <td>{{.ToplamGun}}</td>
+        <td>
+          {{if .Degerlendirildi}}
+          Değerlendirildi
+          {{else}}
+          <a href="/staj-degerlendir?no={{$.Vars.Ogr.No}}&baslangic={{.Baslangic}}" class="btn btn-primary">
+            <span class="oi oi-check"></span> Değerlendir
+          </a>
+          {{end}}
+        </td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  {{end}}
+
+  {{if ne (len .Vars.DenkStajlar) 0}}
+  <h2>DGS/Yatay Geçiş Stajları</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Kurum Adı</th>
+        <th scope="col">Önceki Okul</th>
+        <th scope="col">Kabul Gün</th>
+        <th scope="col">Toplam Gün</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Vars.DenkStajlar}}
+      <tr>
+        <td>{{.KurumAdi}}</td>
+        <td>{{.OncekiOkul}}</td>
+        <td>{{.KabulGun}}</td>
+        <td>{{.ToplamGun}}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  {{end}}
+  {{end}}
+</div>
+{{end}}
